@@ -9,7 +9,7 @@ import myfilehandler as mfh
 import dataanalytics as da
 
 
-INPUT_FILE_PATH = 'Presale Data.csv'
+INPUT_FILE_PATH = '/Users/lfvarela/Google Drive/Datum/Datum Pre Sale.csv'
 
 
 def run():
