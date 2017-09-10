@@ -106,3 +106,30 @@ def get_txs_by_day(transactions):
         buckets[weekday_weekend_index]['total_value'] += float(tx['Value_IN(ETH)'])
 
     return buckets
+
+
+def get_txs_by_date(transactions):
+    # for every transaction
+        # if bucket exists, add to bucket
+    # else
+        # Create bucket, add to bucket
+    # Convert set to list of buckets
+    # return buckets
+    buckets = dict()
+    for tx in transactions:
+        date = mtc.timestamp_to_date(tx['UnixTimestamp'])
+        date_str = mtc.timestamp_to_date_str(tx['UnixTimestamp'])
+        if date in buckets:
+            buckets[date]['date_str'] = date_str
+            buckets[date]['num_transactions'] += 1
+            buckets[date]['total_value'] += float(tx['Value_IN(ETH)'])
+        else:
+            buckets[date] = dict()
+            buckets[date]['date_str'] = date_str
+            buckets[date]['num_transactions'] = 1
+            buckets[date]['total_value'] = float(tx['Value_IN(ETH)'])
+
+    buckets_list = []
+    for key in sorted(buckets.keys()):
+        buckets_list.append(buckets[key])
+    return buckets_list

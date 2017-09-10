@@ -44,3 +44,12 @@ def timestamp_to_time_of_day(timestamp):
     """
     dt = timestamp_to_datetime(timestamp)
     return dt.hour * 60 + dt.minute
+
+
+def timestamp_to_date_str(timestamp):
+    return timestamp_to_datetime(timestamp).strftime('%a %m/%d/%y')
+
+
+def timestamp_to_date(timestamp):
+    return timestamp_to_datetime(timestamp).date()
+
