@@ -1,13 +1,13 @@
+"""
+Sample script to use dataanalytics.get_contributors_tokens(contributor_addresses) properly
+"""
+
 import myfilehandler as mfh
 import dataanalytics as da
 
 
 INPUT_FILE_PATH = '/Users/lfvarela/Google Drive/Datum/Datum Pre Sale.csv'
 OUTPUT_DIR = 'Results/'
-
-
-# TODO: Add concurrency
-# TODO: catch http errors (try again for error)
 
 
 def run():
