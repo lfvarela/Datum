@@ -4,8 +4,6 @@ September 9, 2017. If Etherscan.io is to change the keys on their csv export fil
 some parts of this module.
 """
 
-# TODO: do a function that gathers data from all contributors and analyses which tokens they invest in.
-
 import mytimeconversions as mtc
 import urllib.request
 import json
@@ -14,8 +12,8 @@ import threading
 
 def get_contributors(transactions):
     """
-    :param transactions:
-    :return: Sorted list of tuples, where each tuple has the form (contributor address, value_in). Sorted by value_in
+    :param transactions: list of transactions, where each transaction is a dict
+    :return: Sorted list of dicts, where each tuple has the form {contributor address, value_in}. Sorted by value_in.
     """
     contributors = {}
     for tx in transactions:
