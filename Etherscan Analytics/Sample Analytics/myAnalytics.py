@@ -3,9 +3,12 @@ Sample script for Datum's data analytics platform. You can run this file and it 
 that we are producing from Etherscan.io transactions. Make sure you have the correct INPUT_FILE_PATH
 for the transaction file you're trying to analyse. Feel free to modify parameters and play around with it.
 """
-
+import sys
+sys.path.append('../Modules')
 import myfilehandler as mfh
 import dataanalytics as da
+
+sys.path.append('../Modules')
 
 
 INPUT_FILE_PATH = '/Users/lfvarela/Google Drive/Datum/Datum Pre Sale.csv'

@@ -7,7 +7,8 @@ This sample script gets the first k transactions up and until 3500 ETH were reac
 transactions from the top 10 contributors so that those don't skew the results
 """
 
-
+import sys
+sys.path.append('../Modules')
 import myfilehandler as mfh
 import dataanalytics as da
 

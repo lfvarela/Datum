@@ -1,7 +1,8 @@
 """
 Sample script to use dataanalytics.get_contributors_tokens(contributor_addresses) properly
 """
-
+import sys
+sys.path.append('../Modules')
 import myfilehandler as mfh
 import dataanalytics as da
 
