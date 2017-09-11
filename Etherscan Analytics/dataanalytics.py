@@ -4,7 +4,12 @@ September 9, 2017. If Etherscan.io is to change the keys on their csv export fil
 some parts of this module.
 """
 
+# TODO: do a function that gathers data from all contributors and analyses which tokens they invest in.
+
 import mytimeconversions as mtc
+import urllib.request
+import json
+import threading
 
 
 def get_contributors(transactions):
@@ -133,3 +138,72 @@ def get_txs_by_date(transactions):
     for key in sorted(buckets.keys()):
         buckets_list.append(buckets[key])
     return buckets_list
+
+
+def get_contributors_tokens(contributor_addresses):
+    """
+    Returns a list of dictionaries, where each dictionary corresponds to a token that one or more address from
+    contributor_addresses owns, and some basic information on it. Currently we support: name, symbol, and num_holders,
+    which is the amount of contributors that own the corresponding token.
+
+    We gather the data from Ethplorer's API, and make it efficient by using multithreading.
+    :param contributor_addresses: list of valid ETH addresses.
+    :return: list of dictionaries, where each dictionary represents info from a token that one or more address holds.
+    """
+
+    urls = ['https://api.ethplorer.io/getAddressInfo/' + eth_address +
+            '?apiKey=freekey' for eth_address in contributor_addresses]
+
+    contributors_tokens = dict()
+
+    lock = threading.Lock()  # Mutex to make sure shared data is handled properly
+
+    def fetch_url(url):
+        """
+        Method for a single thread of execution. Makes HTTP request and updates the contributors_tokens dictionary
+        with relevant information
+        :param url: url for HTTP request
+        :return: None
+        """
+
+        # make HTTP request until it succeeds
+        while True:
+            try:
+                # Request
+                response = urllib.request.urlopen(url).read()
+                response = json.loads(response)
+
+                # Make sure address has contributed to tokens
+                if 'tokens' in response:
+                    r_tokens = response['tokens']
+
+                    # Critical region, shared data, lock mutex
+                    lock.acquire()
+
+                    # Add every token to our data
+                    for token_dict in r_tokens:
+                        token_info = token_dict['tokenInfo']
+                        token_symbol = token_info['symbol']
+
+                        if token_symbol not in contributors_tokens:
+                            contributors_tokens[token_symbol] = dict()
+                            contributors_tokens[token_symbol]['symbol'] = token_symbol
+                            contributors_tokens[token_symbol]['name'] = token_info['name']
+                            contributors_tokens[token_symbol]['num_holders'] = 1
+                        else:
+                            contributors_tokens[token_symbol]['num_holders'] += 1
+                    lock.release()
+                break
+            except urllib.error.URLError:
+                print('HTTP Request Error, trying again.')
+
+    # Make a thread for every url.
+    threads = [threading.Thread(target=fetch_url, args=(url,)) for url in urls]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+
+    # Convert dict to list and return it in descending order by 'num_holders'
+    contributors_tokens_list = [contributors_tokens[token] for token in contributors_tokens]
+    return sorted(contributors_tokens_list, key=lambda k: k['num_holders'], reverse=True)

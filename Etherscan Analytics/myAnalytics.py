@@ -4,8 +4,6 @@ that we are producing from Etherscan.io transactions. Make sure you have the cor
 for the transaction file you're trying to analyse. Feel free to modify parameters and play around with it.
 """
 
-# TODO: make a transactions list excluding the top 10 contributors transactions and up till 3500 ETH raised
-
 import myfilehandler as mfh
 import dataanalytics as da
 
