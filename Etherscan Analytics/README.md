@@ -8,3 +8,5 @@ This package includes some modules for performing data analysis on Etherscan.io 
 
 ## Sample Use Cases
 - myAnalytics.py
+- myAnalyticsContributorData.py
+- myAnalyticsExcludingExtremities.py
